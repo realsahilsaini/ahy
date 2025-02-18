@@ -1,0 +1,191 @@
+/* RESET  */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: white;
+}
+
+body{
+    background-color: black;
+}
+
+
+.nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8rem;
+    border: 2px gray solid;
+    width: 90%;
+    margin: 0 auto 0 auto;
+    height: 5rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    backdrop-filter: blur(30px);
+}
+
+.nav *{
+    cursor: pointer;
+}
+
+main > .parentGrid{
+    width: 90%;
+    padding: 2rem;
+    display:grid;
+    grid-template-columns: 3fr 2fr;
+    column-gap: 30px;
+    border: 2px solid gray;
+    width: 90%;
+    margin: 10px auto 0 auto;
+    backdrop-filter: blur(10px);
+}
+
+.parentGrid > .leftPane{
+    border: 5px red solid;
+}
+
+.parentGrid > .rightPane{
+    border: 5px skyblue solid;
+}
+
+.squareParent{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+}
+
+.squareParent > .square div {
+    width: 120px;
+    height: 120px;
+    background-color: rgba(245, 245, 220, 0.458) ;
+    aspect-ratio:1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.squareParent > .square:hover div {
+    transform: translateX(70%);
+}
+
+.squareParent > .square:nth-last-child(2):hover div {
+    transform: translateX(-70%);
+}
+
+
+.numberParent{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+    width: 100%;
+    z-index: -9;
+    gap: 5%;
+}
+
+.number {
+    width: 120px !important;
+    height: 120px;
+    /* background-color: red; */
+    aspect-ratio:1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.mainBody{
+    border: 2px green solid;
+    height: 150vh;
+}
+
+
+/* Right Pane*/
+.rightPane > .rightGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    grid-template-rows: repeat(3, auto);
+    grid-template-areas: 
+        "box1 box2"
+        "box3 box3"
+        "box4 box5";
+    border: 2px black solid;
+    padding: 1%;
+    position: sticky;
+    top: 10%;
+}
+
+.rightGridBox{
+    height: 120px;
+    background-color: greenyellow;
+}
+
+.box1{
+    grid-area: box1;
+}
+
+.box2{
+    grid-area: box2;
+}
+
+.box3{
+    grid-area: box3;
+}
+
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
+    background-color: orangered;
+    color: white;
+    margin-top: 10px;
+    width: 90%;
+    height: 90vh;
+    margin: 0 auto 0 auto;
+}
+
+.chatBox{
+    position: fixed;
+    bottom: 5%;
+    right: 1%;
+    width: 60px;
+    height: 60px;
+    background-color: purple;
+}
+
+.chatBox:hover ~ .hiddenBar {
+    display: block;    
+}
+
+
+.hiddenBar{
+    background-color: purple;
+    position: absolute;
+    top: 0;
+    height: 10%;
+    width: 100%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 500;
+    display: none;
+}
+
+.dummyImg{
+    position: fixed;
+    top: -30%;
+    left: -10%;
+    width: 30%;
+    z-index: -99999;
+}
+
+
+
+
