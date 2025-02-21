@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine.js Tabs with Navigation</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        .hidden { display: none; }
+        .active { font-weight: bold; color: red; }
+        .breadcrumbs { font-size: 14px; color: gray; margin-bottom: 10px; }
+    </style>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
+</head>
+<body>
+    <div x-data="tabs()" class="m-5">
+        <!-- Navigation Buttons -->
+        <div class="flex gap-4 items-center">
+            <button @click="goBack" :disabled="historyIndex === 0"
+        x-bind:class="historyIndex === 0 ? 'opacity-20' : 'opacity-100' "
+        class="border border-black py-2 px-4 rounded inline-flex justify-center items-center"
+        >
+        <i class="ri-arrow-left-s-fill text-2xl"></i>
+        Back</button>
+
+        <button @click="goForward" :disabled="historyIndex >= history.length - 1" x-bind:class="historyIndex >= history.length - 1 ? 'opacity-20' : 'opacity-100' " class="border border-black py-2 px-4 rounded inline-flex justify-center items-center">
+            Forward
+            <i class="ri-arrow-right-s-fill text-2xl"></i>
+        </button>
+
+
+        <button @click="reset" class="border border-black py-2 px-4 rounded">Reset</button>
+        </div>
+
+        <div>
+            <img
+            width="200"
+            class="mx-auto mt-5"
+             src="data:image/jpeg;base64,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CDHvS8YVsSmw8SYI8kFu5Pqccm+qpm2pSNxQvgxarkQm7vDSfKBya0984W0vj/pehETzvFqM5u95/wBNh+y3sOinvB22/qG1g6OCIsbzuB6DoPkgzovDemxIBa6BkkY1Eku9+TvlOHFtR7WpsSDPRPEZrJh7nZu/fl0UuRAREQfMbr6iIC6Y8qyYI8djXY5ZAOPcu5EAbckREBERAREQdM1KsnIBZNsa9h5tcAQfgVwkKfBp0HTIQ2Q2/dY0AfkslEBERAREQEREBERAQjPNEQEREBERAREQERai7KuKHb8WOebW+Ud3HYY+KCKXxdUxMVH6utBuqYcP4kXpCB9e+FXN8WVDtqkiJXJl8xOxSGsbk49+TvjJ691YslUpSwrWEepuaZqM3xHDPniPcM4HoOXuC1Fk2/Hu+v8A1rdLcMH+RBI2A6Hfp+vwQY9q8G4Mehw310vbHJ1ODTtjoOfZW/BhiDBDWcgAB8FzRAREQEREBERAREQEREBERB8cdLclVfR59tyXbM1CfIMnJhzYOeWoc3DvsCrHqkJ8enRGyxw8tIafUhec3fWL5CHRZaA6G7xHOeer8knJI+yOaDZ0KUfxO4hujzQP0aGc+mkey347legmt0tAbyCj1i2uy1KE2DCOXc3u7uP7KRICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAoxxHocW4LViQaecRdnN3xkjopOiCn7M4UxIs02YvR5iOHswSdX/AJH9grehwxChhsMYA2AHRckQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERB//Z" alt="">
+        </div>
+        
+        <!-- Tabs Navigation -->
+        <nav class="mt-5 bg-gray-200 p-2 rounded-lg flex gap-8 justify-center border border-gray-300">
+            <button @click="openTab('home')" :class="{ 'active': currentTab === 'home' }">Home</button>
+            <button @click="openTab('about')" :class="{ 'active': currentTab === 'about' }">About</button>
+            <button @click="openTab('contact')" :class="{ 'active': currentTab === 'contact' }">Contact</button>
+            <button @click="openTab('products')" :class="{ 'active': currentTab.startsWith('products') }">Products</button>
+        </nav>
+
+        <!-- Breadcrumbs -->
+         <div class="breadcrumbs mt-2" x-html="generateBreadcrumbs()"></div>
+        
+        <!-- Tabs Content -->
+        <div>
+            <div class="text-2xl font-bold text-neutral-500" x-show="currentTab === 'home'">Welcome to the Home Page</div>
+            <div class="text-2xl font-bold text-neutral-500" x-show="currentTab === 'about'">This is the About Page</div>
+            <div class="text-2xl font-bold text-neutral-500" x-show="currentTab === 'contact'">Get in touch on the Contact Page</div>
+
+            <!-- Products Section -->
+            <div x-show="currentTab.startsWith('products')">
+                <h2 class="text-2xl font-bold text-neutral-500">Products Page</h2>
+                <!-- Sub-tabs for Products -->
+                <nav class="mt-5 bg-gray-200 py-2 px-1 border border-gray-300 rounded-lg flex gap-8 text-xs justify-center">
+                    <button  @click="openTab('products/clothing')" :class="{ 'active': currentTab === 'products/clothing' }">Clothing</button>
+                    <button @click="openTab('products/electronics')" :class="{ 'active': currentTab === 'products/electronics' }">Electronics</button>
+                    <button @click="openTab('products/groceries')" :class="{ 'active': currentTab === 'products/groceries' }">Groceries</button>
+                </nav>
+
+                <!-- Products Content -->
+                <div class="text-lg font-light text-neutral-500" x-show="currentTab === 'products/clothing'">Explore the latest fashion in Clothing.</div>
+                <div class="text-lg font-light text-neutral-500" x-show="currentTab === 'products/electronics'">Check out the latest gadgets in Electronics.</div>
+                <div class="text-lg font-light text-neutral-500" x-show="currentTab === 'products/groceries'">Find fresh and healthy Groceries.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function tabs() {
+            return {
+                currentTab: 'home',
+                history: ['home'],
+                historyIndex: 0,
+                
+                openTab(tab) {
+                    if (this.currentTab !== tab) {
+                        console .log("History: ", this.history, "HistoryIndex: ", this.historyIndex);
+
+                        this.currentTab = tab;
+                        this.history = this.history.slice(0, this.historyIndex + 1);
+                        this.history.push(tab);
+                        this.historyIndex++;
+                        
+                        console .log("History: ", this.history, "HistoryIndex: ", this.historyIndex);
+                    }
+                },
+                
+                goBack() {
+                    if (this.historyIndex > 0) {
+                        console .log("History: ", this.history, "HistoryIndex: ", this.historyIndex);
+
+                        this.historyIndex--;
+                        this.currentTab = this.history[this.historyIndex];
+
+                        console .log("History: ", this.history, "HistoryIndex: ", this.historyIndex);
+                    }
+                },
+                
+                goForward() {
+                    if (this.historyIndex < this.history.length - 1) {
+                        console .log("History: ", this.history, "HistoryIndex: ", this.historyIndex);
+
+                        this.historyIndex++;
+                        this.currentTab = this.history[this.historyIndex];
+                        console .log("History: ", this.history, "HistoryIndex: ", this.historyIndex);
+                    }
+                },
+                
+                reset() {
+                    this.history = ['home'];
+                    this.historyIndex = 0;
+                    this.currentTab = 'home';
+       
+                },
+
+                generateBreadcrumbs() {
+                    let parts = this.currentTab.split("/");
+
+
+                    return parts.map((part, index) => {
+                        let path = parts.slice(0, index + 1).join("/");
+                        return `<span>${part.charAt(0).toUpperCase() + part.slice(1)}</span>`;
+                    }).join(" > ");
+                }
+            };
+        }
+    </script>
+</body>
+</html>

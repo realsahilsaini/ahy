@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <style>
+    
+    /* Added custom font from Google fonts */
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* Freetime: tried to add shake animation to the button similar to discord */
+    @keyframes shake {
+      0% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-3px);
+      }
+
+      50% {
+        transform: translateX(3px);
+      }
+
+      75% {
+        transform: translateX(-3px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .animate-shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+
+  </style>
+</head>
+
+<body class="flex flex-col justify-center items-center h-screen" style="background-color: black; color: white;">
+
+  <!-- Dynamically adding 1 to 10 buttons from Js -->
+  <div id="buttonsBlock" class="border border-neutral-500 mb-4 grid grid-cols-3 w-[200px] bg-[#333] p-2 rounded">
+
+  </div>
+
+
+  <!-- For Input Type Game -->
+  <!-- <input type="text" id="input" placeholder="Enter any 1 to 10"> -->
+  <!-- <button id="submitBtn" class="bg-gray-600 px-2 rounded hover:bg-gray-500" onclick="checkNumber()">Submit</button> -->
+
+  <button onmouseover="this.classList.add('animate-shake')" onmouseout="this.classList.remove('animate-shake')"
+    id="resetBtn" class="absolute top-8 right-8 bg-gray-600 px-2 rounded hover:bg-red-500 transition-all duration-200"
+    onclick="resetGame()">Reset</button>
+
+
+  <!-- Restart part: (Initially hidden) - Gets visible when correctGuesses array's length gets 2-->
+  <div id="restartBlock" style="display: none; margin-top: 30px;">
+    <input class="text-black rounded-xl px-2 py-1" type="text" id="restartInput" autocomplete="off">
+    <button class="bg-gray-600 px-2 rounded ml-2 hover:scale-110 hover:bg-green-800 transition-all duration-200"
+      id="restartBtn" onclick="restartGame()">Restart</button>
+  </div>
+
+  <div>
+    <p id="randomNumber"></p>
+  </div>
+
+  <div>
+    <p class="text-sm font-light mt-2" id="message"></p>
+  </div>
+
+  <div class="bg-gray-800 p-2 rounded mt-2">
+    <p class="text-xs font-light" id="my_attempts"></p>
+  </div>
+
+  <div class="bg-gray-800 p-2 rounded mt-2">
+    <p class="text-xs font-light" id="remaining_attempts"></p>
+  </div>
+
+  <div class="bg-gray-800 p-2 rounded mt-2">
+    <p class="text-xs font-light" id="best_attempts"></p>
+  </div>
+
+  <script type="module" defer src="./script.js"></script>
+
+</body>
+
+</html>
